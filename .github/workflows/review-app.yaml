@@ -3,8 +3,12 @@ on:
   push:
     branches:
       - main
+      - stacks
   pull_request:
     types: [opened, synchronize, reopened]
+
+env:
+    IMAGE_NAME: app
 jobs:
   CI:
     name: "Review App"
@@ -12,6 +16,43 @@ jobs:
     timeout-minutes: 60
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+    - name: Start k8s cluster
+      uses: engineerd/setup-kind@v0.6.2
+      with:
+        skipClusterLogsExport: "true"
     - name: "Build Image"
       run: docker build -t app .
+    - name: "Load Image"
+      run: kind load docker-image app:latest
+    - name: Install Helm
+      uses: azure/setup-helm@v4
+    - name: Install ngrok Helm chart
+      run: |
+        helm repo add ngrok https://charts.ngrok.com
+    - name: Deploy the ngrok-operator Helm chart
+      run: |
+        helm install ngrok-operator ngrok/ngrok-operator \
+        --create-namespace \
+        --namespace ngrok-operator \
+        --version 0.17.0-rc.3 \
+        --set credentials.apiKey=${{ secrets.NGROK_API_KEY }} \
+        --set credentials.authtoken=${{ secrets.NGROK_AUTHTOKEN }}
+    - name: "Deploy App"
+      uses: jonstacks/helm-deploy@v0
+      with:
+        # Required
+        release-name: my-release
+        chart: ./charts/app
+        # Optional
+        atomic: true
+        create-namespace: true
+        debug: true
+        dry-run: false
+        namespace: default
+        timeout: 5m
+        wait: true
+        sets: >
+          reviewAppId="${{ github.event.number }}"
+    - name: "Sleep for 30 minutes"
+      run: sleep 1800

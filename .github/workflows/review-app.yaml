@@ -38,6 +38,9 @@ jobs:
         --version 0.17.0-rc.3 \
         --set credentials.apiKey=${{ secrets.NGROK_API_KEY }} \
         --set credentials.authtoken=${{ secrets.NGROK_AUTHTOKEN }}
+    - name: Set outputs
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
     - name: "Deploy App"
       uses: jonstacks/helm-deploy@v0
       with:
@@ -53,6 +56,6 @@ jobs:
         timeout: 5m
         wait: true
         sets: >
-          reviewAppId="${{ github.event.number }}"
+          reviewAppId=${{  steps.vars.outputs.sha_short }}
     - name: "Sleep for 30 minutes"
       run: sleep 1800

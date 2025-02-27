@@ -24,7 +24,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: stacks-review-app-test-{{ .Values.reviewAppId | quote }}.ngrok.app
+    - host: stacks-review-app-test-{{ .Values.reviewAppId }}.ngrok.app
       http:
         paths:
           - path: /

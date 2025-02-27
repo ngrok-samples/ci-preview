@@ -1,0 +1,17 @@
+name: "CI"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  CI:
+    name: "Review App"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: "Checkout"
+      uses: actions/checkout@v3
+    - name: "Build Image"
+      run: docker build -t app .

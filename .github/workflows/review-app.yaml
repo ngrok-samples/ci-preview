@@ -35,7 +35,7 @@ jobs:
         helm install ngrok-operator ngrok/ngrok-operator \
         --create-namespace \
         --namespace ngrok-operator \
-        --version 0.17.0-rc.3 \
+        --version 0.18.1 \
         --set credentials.apiKey=${{ secrets.NGROK_API_KEY }} \
         --set credentials.authtoken=${{ secrets.NGROK_AUTHTOKEN }}
     - name: Set outputs

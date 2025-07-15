@@ -56,6 +56,6 @@ jobs:
         timeout: 5m
         wait: true
         sets: >
-          reviewAppId=${{  steps.vars.outputs.sha_short }}
+          reviewAppID=${{ steps.vars.outputs.sha_short }}
     - name: "Sleep for 30 minutes"
       run: sleep 1800

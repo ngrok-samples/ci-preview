@@ -24,7 +24,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: https://{{ .Values.reviewAppId }}.ci.internal
+    - host: {{ .Values.reviewAppId }}.ci.internal
       http:
         paths:
           - path: /

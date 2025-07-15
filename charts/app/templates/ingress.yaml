@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  url: https://{{ .Values.reviewAppID }}.internal
+  url: https://{{ .Values.reviewAppID }}.ci.internal
   upstream:
     url: http://{{ include "app.fullname" $ }}.default:{{ $.Values.service.port }}
 {{- end }}

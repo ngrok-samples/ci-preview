@@ -63,8 +63,7 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: stacks-review-app-test.ngrok.app
+    - host: {{ .Values.reviewAppId }}.ci.internal
       paths:
         - path: /
           pathType: ImplementationSpecific
